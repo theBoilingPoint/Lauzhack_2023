@@ -15,6 +15,8 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
 
+    val foodModelNames: MutableMap<LocalDate, MutableList<String>> = mutableMapOf()
+    val foodModelDescriptions: MutableMap<LocalDate, MutableList<String>> = mutableMapOf()
     private var foodModels: ArrayList<FoodModel> = ArrayList<FoodModel>()
     private lateinit var adapter: Food_RecyclerViewAdapter
     private var date: LocalDate = LocalDate.now()
@@ -23,7 +25,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupFoodModels()
+        hardCodeData()
+        updateFoodModel()
+
 
 
         val recyclerview = findViewById<RecyclerView>(R.id.dRecyclerView)
@@ -44,15 +48,40 @@ class MainActivity : AppCompatActivity() {
     private fun changeDate(delta:Long){
         date = date.plusDays(delta)
         dateText.text = date.toString()
+        updateFoodModel()
 
-        
         adapter.notifyDataSetChanged()
     }
-    private fun setupFoodModels(){
-        val foodModelNames = listOf<String>("stuffed sauce", "lasagna", "tea", "mysetry menu")
-        val foodModelDescriptions = listOf<String>("sus menu", "the classic", "for the brits among us", "at your own risk")
-        for(i in foodModelNames.indices){
-            foodModels.add(FoodModel(foodModelNames.get(i), foodModelDescriptions.get(i), 0))
+
+    private fun updateFoodModel(){
+        val names = foodModelNames[date]
+        val descriptions = foodModelDescriptions[date]
+        if(names == null || descriptions == null){
+            foodModels = ArrayList<FoodModel>()
+        }else{
+            foodModels.clear()
+            for(i in names.indices){
+                foodModels.add(FoodModel(names[i], descriptions[i], 0))
+            }
         }
+
+
+    }
+    private fun hardCodeData(){
+
+
+        // Hardcode some elements in the map
+        val date1 = LocalDate.now()
+        foodModelNames.put(date1, mutableListOf("vegan item 1", "vegan item 2"))
+        foodModelDescriptions.put(date1, mutableListOf("sad day", "go eat migros"))
+
+        val date2 = date1.plusDays(1)
+        foodModelNames.put(date2, mutableListOf("stuffed sauce", "pasta with pasta"))
+        foodModelDescriptions.put(date2, mutableListOf("beware", "yum"))
+
+        val date3 = date2.plusDays(1)
+        foodModelNames.put(date3, mutableListOf("water", "tea"))
+        foodModelDescriptions.put(date3, mutableListOf("hydrate", "hydrate but less"))
+
     }
 }
