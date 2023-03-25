@@ -36,6 +36,13 @@ class Food_RecyclerViewAdapter(private val mList: List<FoodModel>) : RecyclerVie
 
     // Holds the views for adding it to image and text
     class MyViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+        init {
+            // Set a click listener on the item view
+            itemView.setOnClickListener {
+                // Handle the click event for this item
+                // For example, you can launch a new activity or show a dialog
+            }
+        }
         val nameText: TextView = itemView.findViewById(R.id.plate_name_text)
         val descText: TextView = itemView.findViewById(R.id.description_text)
     }
